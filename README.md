@@ -1,8 +1,8 @@
 # Checkmk extension for ...
 
-![build](https://github.com/jiuka/checkmk_template/workflows/build/badge.svg)
-![flake8](https://github.com/jiuka/checkmk_template/workflows/Lint/badge.svg)
-![pytest](https://github.com/jiuka/checkmk_template/workflows/pytest/badge.svg)
+![build](https://github.com/scsitteam/checkmk_jetbrains_licensevault/workflows/build/badge.svg)
+![flake8](https://github.com/scsitteam/checkmk_jetbrains_licensevault/workflows/Lint/badge.svg)
+![pytest](https://github.com/scsitteam/checkmk_jetbrains_licensevault/workflows/pytest/badge.svg)
 
 ## Description
 

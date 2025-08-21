@@ -32,6 +32,7 @@ from cmk.agent_based.v2 import (
     Service,
     State,
     StringTable,
+    Metric,
 )
 
 
@@ -81,6 +82,7 @@ def check_jetbrains_licensevault(
             label="Regular in use",
             boundaries=(0, lic['regularTotal'])
         )
+        yield Metric('regular_total', lic['regularTotal'])
 
     if 'virtual_upper' in params or lic.get('virtualTotal', 0) > 0:
         yield from check_levels(
@@ -91,6 +93,7 @@ def check_jetbrains_licensevault(
             label="Virtual in use",
             boundaries=(0, lic['virtualTotal'])
         )
+        yield Metric('virtual_total', lic['virtualTotal'])
 
     if 'trueup_upper' in params or lic.get('trueUpTotal', 0) > 0:
         yield from check_levels(
@@ -101,6 +104,7 @@ def check_jetbrains_licensevault(
             label="TrueUp in use",
             boundaries=(0, lic['trueUpTotal'])
         )
+        yield Metric('trueup_total', lic['trueUpTotal'])
 
 
 check_plugin_jetbrains_licensevault = CheckPlugin(

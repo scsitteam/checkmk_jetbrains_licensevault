@@ -90,14 +90,17 @@ def test_discovery_jetbrains_licensevault(section, result):
     ('All Products Pack', {}, [
         Result(state=State.OK, summary='Virtual in use: 3'),
         Metric('virtual_inuse', 3.0, boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
     ]),
     ('CLion', {}, [
         Result(state=State.OK, summary='Regular in use: 3'),
         Metric('regular_inuse', 3.0, boundaries=(0.0, 10.0)),
+        Metric('regular_total', 10.0),
     ]),
     ('DataGrip', {}, [
         Result(state=State.OK, summary='TrueUp in use: 1'),
         Metric('trueup_inuse', 1.0, boundaries=(0.0, 5.0)),
+        Metric('trueup_total', 5.0),
     ]),
 ])
 def test_check_jetbrains_licensevault(item, params, result):

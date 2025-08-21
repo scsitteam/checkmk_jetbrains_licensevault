@@ -5,7 +5,7 @@
     'files': {
         'cmk_addons_plugins': [
             'jetbrains_licensevault/agent_based/licensevault.py',
-            #'jetbrains_licensevault/graphing/licensevault.py',
+            'jetbrains_licensevault/graphing/licensevault.py',
             'jetbrains_licensevault/lib/agent.py',
             'jetbrains_licensevault/libexec/agent_jetbrains_licensevault',
             'jetbrains_licensevault/rulesets/datasource.py',
@@ -15,7 +15,7 @@
     },
     'name': 'jetbrains_licensevault',
     'title': u'Jetbrains LicenseVault agent and checks',
-    'version': '0.0.1',
+    'version': '0.0.2',
     'version.min_required': '2.4.0',
     'version.packaged': '2.4.0',
     'version.usable_until': '2.5.0',

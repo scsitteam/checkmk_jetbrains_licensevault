@@ -19,13 +19,20 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from cmk.graphing.v1 import graphs, metrics
+from cmk.graphing.v1 import graphs, metrics, perfometers
 
 metric_virtual_inuse = metrics.Metric(
     name='virtual_inuse',
     title=metrics.Title('Virtual in use'),
     unit=metrics.Unit(metrics.DecimalNotation("")),
     color=metrics.Color.DARK_BLUE,
+)
+
+metric_trueup_inuse = metrics.Metric(
+    name='trueup_inuse',
+    title=metrics.Title('Postpaid in use'),
+    unit=metrics.Unit(metrics.DecimalNotation("")),
+    color=metrics.Color.DARK_PURPLE,
 )
 
 graph_virtual_inuse = graphs.Graph(
@@ -40,5 +47,30 @@ graph_virtual_inuse = graphs.Graph(
             minuend="virtual_total",
             subtrahend="virtual_inuse",
         ),
+        'trueup_inuse',
+        metrics.Difference(
+            graphs.Title("Postpaid available"),
+            metrics.Color.LIGHT_PURPLE,
+            minuend="trueup_total",
+            subtrahend="trueup_inuse",
+        ),
     ],
+    optional=[
+        'trueup_inuse',
+        'trueup_total',
+    ],
+)
+
+perfometer_licensevault = perfometers.Perfometer(
+    name='licensevault',
+    focus_range=perfometers.FocusRange(perfometers.Closed(0), perfometers.Closed(
+        metrics.Sum(metrics.Title(''), metrics.Color.BLUE, ['virtual_total', 'trueup_total'])
+    )),
+    segments=['virtual_inuse', 'trueup_inuse',]
+)
+
+perfometer_licensevault_virtual_only = perfometers.Perfometer(
+    name='licensevault_virtual_only',
+    focus_range=perfometers.FocusRange(perfometers.Closed(0), perfometers.Closed('virtual_total')),
+    segments=['virtual_inuse',]
 )

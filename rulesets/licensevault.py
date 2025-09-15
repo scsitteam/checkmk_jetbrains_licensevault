@@ -44,7 +44,7 @@ def _lic_parameter_form(title):
                 parameter_form=SimpleLevels(
                     level_direction=LevelDirection.UPPER,
                     form_spec_template=Integer(),
-                    prefill_fixed_levels=InputHint(value=0),
+                    prefill_fixed_levels=InputHint(value=(0, 0)),
                 ),
             ),
             CascadingSingleChoiceElement(
@@ -53,7 +53,7 @@ def _lic_parameter_form(title):
                 parameter_form=SimpleLevels(
                     level_direction=LevelDirection.LOWER,
                     form_spec_template=Integer(),
-                    prefill_fixed_levels=InputHint(value=0),
+                    prefill_fixed_levels=InputHint(value=(0, 0)),
                 ),
             ),
             CascadingSingleChoiceElement(
@@ -62,7 +62,7 @@ def _lic_parameter_form(title):
                 parameter_form=SimpleLevels(
                     level_direction=LevelDirection.UPPER,
                     form_spec_template=Percentage(),
-                    prefill_fixed_levels=InputHint(value=0),
+                    prefill_fixed_levels=InputHint(value=(0.9, 0.95)),
                 ),
             ),
         ],

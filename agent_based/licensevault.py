@@ -74,9 +74,17 @@ def check_jetbrains_licensevault(
     lic = section[item]
 
     if 'regular_upper' in params or lic.get('regularTotal', 0) > 0:
+        levels_upper = params.get('regular_upper', None)
+        match levels_upper:
+            case ('used', level):
+                levels_upper = level
+            case ('free', ('fixed', (warn, crit))):
+                levels_upper = ('fixed', (lic['regularTotal'] - warn, lic['regularTotal'] - crit))
+            case ('used_percent', ('fixed', (warn, crit))):
+                levels_upper = ('fixed', (lic['regularTotal'] * warn, lic['regularTotal'] * crit))
         yield from check_levels(
             value=lic['regularInUse'],
-            levels_upper=params.get('regular_upper', None),
+            levels_upper=levels_upper,
             metric_name='regular_inuse',
             render_func=int,
             label="Regular in use",
@@ -85,9 +93,17 @@ def check_jetbrains_licensevault(
         yield Metric('regular_total', lic['regularTotal'])
 
     if 'virtual_upper' in params or lic.get('virtualTotal', 0) > 0:
+        levels_upper = params.get('virtual_upper', None)
+        match levels_upper:
+            case ('used', level):
+                levels_upper = level
+            case ('free', ('fixed', (warn, crit))):
+                levels_upper = ('fixed', (lic['virtualTotal'] - warn, lic['virtualTotal'] - crit))
+            case ('used_percent', ('fixed', (warn, crit))):
+                levels_upper = ('fixed', (lic['virtualTotal'] * warn, lic['virtualTotal'] * crit))
         yield from check_levels(
             value=lic['virtualInUse'],
-            levels_upper=params.get('virtual_upper', None),
+            levels_upper=levels_upper,
             metric_name='virtual_inuse',
             render_func=int,
             label="Virtual in use",
@@ -96,9 +112,17 @@ def check_jetbrains_licensevault(
         yield Metric('virtual_total', lic['virtualTotal'])
 
     if 'trueup_upper' in params or lic.get('trueUpTotal', 0) > 0:
+        levels_upper = params.get('trueup_upper', None)
+        match levels_upper:
+            case ('used', level):
+                levels_upper = level
+            case ('free', ('fixed', (warn, crit))):
+                levels_upper = ('fixed', (lic['trueUpTotal'] - warn, lic['trueUpTotal'] - crit))
+            case ('used_percent', ('fixed', (warn, crit))):
+                levels_upper = ('fixed', (lic['trueUpTotal'] * warn, lic['trueUpTotal'] * crit))
         yield from check_levels(
             value=lic['trueUpInUse'],
-            levels_upper=params.get('trueup_upper', None),
+            levels_upper=levels_upper,
             metric_name='trueup_inuse',
             render_func=int,
             label="TrueUp in use",

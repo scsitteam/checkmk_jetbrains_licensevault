@@ -21,23 +21,73 @@
 
 from cmk.rulesets.v1 import Help, Title
 from cmk.rulesets.v1.form_specs import (
-    Dictionary,
     CascadingSingleChoice,
     CascadingSingleChoiceElement,
+    DictElement,
+    Dictionary,
+    InputHint,
+    Integer,
+    LevelDirection,
+    Percentage,
+    SimpleLevels,
 )
 from cmk.rulesets.v1.rule_specs import CheckParameters, Topic, HostAndItemCondition
+
+
+def _lic_parameter_form(title):
+    return CascadingSingleChoice(
+        title=title,
+        elements=[
+            CascadingSingleChoiceElement(
+                name='used',
+                title=Title('Used licenses'),
+                parameter_form=SimpleLevels(
+                    level_direction=LevelDirection.UPPER,
+                    form_spec_template=Integer(),
+                    prefill_fixed_levels=InputHint(value=0),
+                ),
+            ),
+            CascadingSingleChoiceElement(
+                name='free',
+                title=Title('Free licenses'),
+                parameter_form=SimpleLevels(
+                    level_direction=LevelDirection.LOWER,
+                    form_spec_template=Integer(),
+                    prefill_fixed_levels=InputHint(value=0),
+                ),
+            ),
+            CascadingSingleChoiceElement(
+                name='used_percent',
+                title=Title('Used licenses in percent'),
+                parameter_form=SimpleLevels(
+                    level_direction=LevelDirection.UPPER,
+                    form_spec_template=Percentage(),
+                    prefill_fixed_levels=InputHint(value=0),
+                ),
+            ),
+        ],
+    )
 
 
 def _parameter_form_jetbrains_licensevault():
     return Dictionary(
         elements={
-            'virtual_upper': CascadingSingleChoice(
-                title=Title("Virtual in use limit"),
-                elements=[
-                    CascadingSingleChoiceElement(
-                        name="fixed", title=Title("Global")),
-                    CascadingSingleChoiceElement(name="china", title=Title("China")),
-                ],
+            'regular_upper': DictElement(
+                parameter_form=_lic_parameter_form(
+                    title=Title('Regular license usage limit'),
+                ),
+                required=False,
+            ),
+            'virtual_upper': DictElement(
+                parameter_form=_lic_parameter_form(
+                    title=Title('Virtual license usage limit'),
+                ),
+                required=False,
+            ),
+            'trueup_upper': DictElement(
+                parameter_form=_lic_parameter_form(
+                    title=Title('Postpaid license usage limit'),
+                ),
                 required=False,
             ),
         }

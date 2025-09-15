@@ -102,6 +102,51 @@ def test_discovery_jetbrains_licensevault(section, result):
         Metric('trueup_inuse', 1.0, boundaries=(0.0, 5.0)),
         Metric('trueup_total', 5.0),
     ]),
+    ('All Products Pack', {'virtual_upper': ('used', ('fixed', (40, 45)))}, [
+        Result(state=State.OK, summary='Virtual in use: 3'),
+        Metric('virtual_inuse', 3.0, levels=(40.0, 45.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
+    ('All Products Pack', {'virtual_upper': ('used', ('fixed', (1, 5)))}, [
+        Result(state=State.WARN, summary='Virtual in use: 3 (warn/crit at 1/5)'),
+        Metric('virtual_inuse', 3.0, levels=(1.0, 5.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
+    ('All Products Pack', {'virtual_upper': ('used', ('fixed', (1, 2)))}, [
+        Result(state=State.CRIT, summary='Virtual in use: 3 (warn/crit at 1/2)'),
+        Metric('virtual_inuse', 3.0, levels=(1.0, 2.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
+    ('All Products Pack', {'virtual_upper': ('free', ('fixed', (10, 5)))}, [
+        Result(state=State.OK, summary='Virtual in use: 3'),
+        Metric('virtual_inuse', 3.0, levels=(40.0, 45.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
+    ('All Products Pack', {'virtual_upper': ('free', ('fixed', (49, 45)))}, [
+        Result(state=State.WARN, summary='Virtual in use: 3 (warn/crit at 1/5)'),
+        Metric('virtual_inuse', 3.0, levels=(1.0, 5.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
+    ('All Products Pack', {'virtual_upper': ('free', ('fixed', (49, 48)))}, [
+        Result(state=State.CRIT, summary='Virtual in use: 3 (warn/crit at 1/2)'),
+        Metric('virtual_inuse', 3.0, levels=(1.0, 2.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
+    ('All Products Pack', {'virtual_upper': ('used_percent', ('fixed', (0.8, 0.9)))}, [
+        Result(state=State.OK, summary='Virtual in use: 3'),
+        Metric('virtual_inuse', 3.0, levels=(40.0, 45.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
+    ('All Products Pack', {'virtual_upper': ('used_percent', ('fixed', (0.02, 0.1)))}, [
+        Result(state=State.WARN, summary='Virtual in use: 3 (warn/crit at 1/5)'),
+        Metric('virtual_inuse', 3.0, levels=(1.0, 5.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
+    ('All Products Pack', {'virtual_upper': ('used_percent', ('fixed', (0.02, 0.04)))}, [
+        Result(state=State.CRIT, summary='Virtual in use: 3 (warn/crit at 1/2)'),
+        Metric('virtual_inuse', 3.0, levels=(1.0, 2.0), boundaries=(0.0, 50.0)),
+        Metric('virtual_total', 50.0),
+    ]),
 ])
 def test_check_jetbrains_licensevault(item, params, result):
     assert list(licensevault.check_jetbrains_licensevault(item, params, EXAMPLE_SECTION)) == result

@@ -82,6 +82,10 @@ def check_jetbrains_licensevault(
                 levels_upper = ('fixed', (lic['regularTotal'] - warn, lic['regularTotal'] - crit))
             case ('used_percent', ('fixed', (warn, crit))):
                 levels_upper = ('fixed', (lic['regularTotal'] * warn, lic['regularTotal'] * crit))
+            case ('free', level):
+                levels_upper = level
+            case ('used_percent', level):
+                levels_upper = level
         yield from check_levels(
             value=lic['regularInUse'],
             levels_upper=levels_upper,
@@ -101,6 +105,10 @@ def check_jetbrains_licensevault(
                 levels_upper = ('fixed', (lic['virtualTotal'] - warn, lic['virtualTotal'] - crit))
             case ('used_percent', ('fixed', (warn, crit))):
                 levels_upper = ('fixed', (lic['virtualTotal'] * warn, lic['virtualTotal'] * crit))
+            case ('free', level):
+                levels_upper = level
+            case ('used_percent', level):
+                levels_upper = level
         yield from check_levels(
             value=lic['virtualInUse'],
             levels_upper=levels_upper,
@@ -120,6 +128,10 @@ def check_jetbrains_licensevault(
                 levels_upper = ('fixed', (lic['trueUpTotal'] - warn, lic['trueUpTotal'] - crit))
             case ('used_percent', ('fixed', (warn, crit))):
                 levels_upper = ('fixed', (lic['trueUpTotal'] * warn, lic['trueUpTotal'] * crit))
+            case ('free', level):
+                levels_upper = level
+            case ('used_percent', level):
+                levels_upper = level
         yield from check_levels(
             value=lic['trueUpInUse'],
             levels_upper=levels_upper,

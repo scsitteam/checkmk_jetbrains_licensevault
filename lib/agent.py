@@ -24,6 +24,7 @@ import logging
 import requests
 from functools import cached_property
 from json import JSONDecodeError
+from datetime import date, timedelta
 
 from cmk.special_agents.v0_unstable.agent_common import (
     CannotRecover,
@@ -71,6 +72,21 @@ class LVAPI:
         except JSONDecodeError as exc:
             raise CannotRecover(f"Couldn't parse JSON at {url}") from exc
 
+    def denials(self, days=1):
+        denials = []
+        yesterday = date.today() - timedelta(days)
+        params = {
+            'from': yesterday.strftime('%Y-%m-%d'),
+            'offset': 0,
+            'limit': 100,
+        }
+        while True:
+            page = self.request('GET', 'public-api/denials/report', params=params)
+            denials += page
+            if len(page) < params['limit']:
+                return denials
+            params['offset'] += params['limit']
+
 
 class AgentLicenseVault:
     '''Checkmk special Agent for JetBrains LicenseVault'''
@@ -109,4 +125,6 @@ class AgentLicenseVault:
     def main(self, args: Args):
         self.args = args
         with SectionWriter('jetbrains_licensevault') as section:
-            section.append_json(self.api.request('GET', 'public-api/licenses/usage'))
+            usage = self.api.request('GET', 'public-api/licenses/usage')
+            usage['denials'] = self.api.denials(days=5)
+            section.append_json(usage)

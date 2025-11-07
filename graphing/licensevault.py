@@ -21,6 +21,13 @@
 
 from cmk.graphing.v1 import graphs, metrics, perfometers
 
+metric_regular_inuse = metrics.Metric(
+    name='regular_inuse',
+    title=metrics.Title('Regular in use'),
+    unit=metrics.Unit(metrics.DecimalNotation("")),
+    color=metrics.Color.DARK_GREEN,
+)
+
 metric_virtual_inuse = metrics.Metric(
     name='virtual_inuse',
     title=metrics.Title('Virtual in use'),
@@ -35,11 +42,25 @@ metric_trueup_inuse = metrics.Metric(
     color=metrics.Color.DARK_PURPLE,
 )
 
-graph_virtual_inuse = graphs.Graph(
-    name='virtual_inuse',
+metric_denials = metrics.Metric(
+    name='denials_24h',
+    title=metrics.Title('Denials in 24h'),
+    unit=metrics.Unit(metrics.DecimalNotation("")),
+    color=metrics.Color.RED,
+)
+
+graph_inuse = graphs.Graph(
+    name='inuse',
     title=graphs.Title('License Usage'),
     minimal_range=graphs.MinimalRange(0, 1),
     compound_lines=[
+        'regular_inuse',
+        metrics.Difference(
+            graphs.Title("Regular free"),
+            metrics.Color.LIGHT_GREEN,
+            minuend="regular_total",
+            subtrahend="regular_inuse",
+        ),
         'virtual_inuse',
         metrics.Difference(
             graphs.Title("Virtual free"),
@@ -61,16 +82,19 @@ graph_virtual_inuse = graphs.Graph(
     ],
 )
 
+graph_denials = graphs.Graph(
+    name='denials',
+    title=graphs.Title('Licens Denials in 24h'),
+    minimal_range=graphs.MinimalRange(0, 1),
+    compound_lines=[
+        'denials_24h',
+    ],
+)
+
 perfometer_licensevault = perfometers.Perfometer(
     name='licensevault',
     focus_range=perfometers.FocusRange(perfometers.Closed(0), perfometers.Closed(
-        metrics.Sum(metrics.Title(''), metrics.Color.BLUE, ['virtual_total', 'trueup_total'])
+        metrics.Sum(metrics.Title(''), metrics.Color.BLUE, ['regular_total', 'virtual_total', 'trueup_total'])
     )),
-    segments=['virtual_inuse', 'trueup_inuse',]
-)
-
-perfometer_licensevault_virtual_only = perfometers.Perfometer(
-    name='licensevault_virtual_only',
-    focus_range=perfometers.FocusRange(perfometers.Closed(0), perfometers.Closed('virtual_total')),
-    segments=['virtual_inuse',]
+    segments=['regular_inuse', 'virtual_inuse', 'trueup_inuse',]
 )

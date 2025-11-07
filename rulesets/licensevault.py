@@ -90,6 +90,15 @@ def _parameter_form_jetbrains_licensevault():
                 ),
                 required=False,
             ),
+            'denials': DictElement(
+                parameter_form=SimpleLevels(
+                    title=Title('Denials in the last 24h'),
+                    level_direction=LevelDirection.UPPER,
+                    form_spec_template=Integer(),
+                    prefill_fixed_levels=InputHint(value=(1, 1)),
+                ),
+                required=False,
+            ),
         }
     )
 
